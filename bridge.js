@@ -3,20 +3,42 @@ const mysql = require('mysql2');
 
 // --- CONFIGURACIÓN ---
 const MQTT_BROKER = 'mqtt://192.168.18.1';
-const MQTT_TOPIC = 'estacion/mayerly_clima'; // Asegúrate de que en Arduino sea IGUAL
-const DB_CONFIG = {
+const MQTT_TOPIC = 'estacion/mayerly_clima';
+
+// Usar pool en lugar de createConnection para reconexión automática
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'root', 
-    database: 'iot_bd'
-};
+    password: 'root',
+    database: 'iot_bd',
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0
+});
 
-const db = mysql.createConnection(DB_CONFIG);
+// Verificar conexión al arrancar
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('❌ Error conectando a MySQL:', err.message);
+        console.error('   Verifica: host, usuario, contraseña y que el servicio MySQL esté activo.');
+    } else {
+        console.log('✅ Conectado a MySQL local (pool activo)');
+        connection.release();
+    }
+});
+
 const client = mqtt.connect(MQTT_BROKER);
 
 client.on('connect', () => {
     console.log('🌍 CONECTADO AL BROKER LOCAL (Raspberry Pi)');
-    client.subscribe(MQTT_TOPIC);
+    client.subscribe(MQTT_TOPIC, (err) => {
+        if (err) console.error('❌ Error suscribiéndose al topic:', err.message);
+        else console.log(`📡 Suscrito al topic: ${MQTT_TOPIC}`);
+    });
+});
+
+client.on('error', (err) => {
+    console.error('❌ Error MQTT:', err.message);
 });
 
 // --- CONFIGURACIÓN DE ALERTAS Y AUTOMATIZACIÓN ---
@@ -48,7 +70,7 @@ setInterval(() => {
         offlineAlertSent = true;
         console.warn('⚠️ Estación fuera de línea detectada');
     }
-}, 60000); // Revisar cada minuto
+}, 60000);
 
 // Ejecutor Automático de Análisis
 setInterval(() => {
@@ -57,15 +79,16 @@ setInterval(() => {
     const path = require('path');
     const scriptPath = path.join(__dirname, 'weather_analysis.py');
     exec(`python3 "${scriptPath}"`, (err, stdout, stderr) => {
-        if (err) console.error('❌ Error en análisis automático:', err);
+        if (err) console.error('❌ Error en análisis automático:', err.message);
         else console.log('✅ Análisis automático completado');
     });
 }, AUTO_ANALYSIS_INTERVAL);
 
 client.on('message', (topic, mensaje) => {
     try {
-        const d = JSON.parse(mensaje.toString());
-        console.log('📥 Dato recibido de la nube:', d);
+        const raw = mensaje.toString();
+        const d = JSON.parse(raw);
+        console.log('📥 Dato recibido de la nube:', JSON.stringify(d));
 
         // Actualizar último pulso de vida
         lastDataTime = Date.now();
@@ -74,26 +97,29 @@ client.on('message', (topic, mensaje) => {
             offlineAlertSent = false;
         }
 
-        const query = `INSERT INTO lecturas 
-            (temperatura, humedad, presion, lluvia, lux, uv) 
-            VALUES (?, ?, ?, ?, ?, ?)`;
-        
-        const values = [
-            d.temp || d.t || 0, d.hum || d.h || 0, 
-            d.pres || d.p || 0, d.lluvia || d.ll || 0, 
-            d.lux || d.lx || 0, d.uv || 0
-        ];
+        const temperatura = d.temp  ?? d.t  ?? null;
+        const humedad     = d.hum   ?? d.h  ?? null;
+        const presion     = d.pres  ?? d.p  ?? null;
+        const lluvia      = d.lluvia ?? d.ll ?? null;
+        const lux         = d.lux   ?? d.lx ?? null;
+        const uv          = d.uv    ?? null;
 
-        db.query(query, values, (err) => {
-            if (err) console.error('❌ Error DB:', err.message);
-            else console.log('💾 Guardado en MySQL local');
+        console.log(`   → temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
+
+        const query = `INSERT INTO lecturas (temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?)`;
+        const values = [temperatura, humedad, presion, lluvia, lux, uv];
+
+        db.query(query, values, (err, result) => {
+            if (err) {
+                console.error('❌ Error al guardar en MySQL:', err.message);
+                console.error('   Código:', err.code, '| SQL State:', err.sqlState);
+            } else {
+                console.log(`💾 Guardado en MySQL OK (insertId: ${result.insertId})`);
+            }
         });
-    } catch (e) {
-        console.error('Error JSON:', e.message);
-    }
-});
 
-db.connect(err => {
-    if (err) console.error('❌ Error MySQL:', err.message);
-    else console.log('✅ Conectado a MySQL local');
+    } catch (e) {
+        console.error('❌ Error parseando JSON:', e.message);
+        console.error('   Mensaje raw:', mensaje.toString());
+    }
 });
