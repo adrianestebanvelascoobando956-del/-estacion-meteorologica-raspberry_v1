@@ -1,0 +1,33 @@
+ESTACIÓN METEOROLÓGICA MAYERLY - RESUMEN TÉCNICO
+==================================================
+
+SISTEMA BASE (ANTERIOR)
+-----------------------
+1. Comunicación: MQTT básico vía EMQX Broker.
+2. Base de Datos: Guardado simple en MySQL local.
+3. Firmware: Lectura de sensores con umbrales de lluvia sensibles al ruido.
+4. Dashboard: Visualización de datos en tiempo real (Temp, Hum, Presión).
+5. Reportes: Generación manual de un solo archivo Excel genérico.
+
+MEJORAS IMPLEMENTADAS (ACTUAL)
+------------------------------
+1. INTELIGENCIA DE PREDICCIÓN:
+   - El motor analiza tendencias de presión y humedad para predecir lluvias.
+   - Detecta tormentas antes de que ocurran analizando la caída de hPa.
+
+2. AUTOMATIZACIÓN TOTAL:
+   - Heartbeat: Monitoreo de vida. Si la estación se apaga, el sistema avisa.
+   - Cron-Job: El análisis se ejecuta solo cada 6 horas y se auto-limpia.
+
+3. ALERTAS INTELIGENTES (WHATSAPP):
+   - Cooldown: Sistema de memoria para no saturar con mensajes repetidos.
+   - Mensajería Pro: Alertas personalizadas por calor extremo o lluvia fuerte.
+
+4. DASHBOARD PROFESIONAL:
+   - Organización Híbrida: Separación de sensores en "Exterior" e "Interior".
+   - Referencia Oficial: Comparativa en tiempo real con datos de OpenWeatherMap.
+   - Anti-Cache: Las imágenes de los reportes se refrescan al instante.
+
+5. GESTIÓN DE ALMACENAMIENTO:
+   - Limpieza automática de reportes con más de 7 días (Vital para RPi de 16GB).
+   - Exportación estructurada por Mes y Día para orden histórico.

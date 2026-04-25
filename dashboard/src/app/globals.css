@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7fa;
+  --foreground: #4e5e6a;
+  --sidebar-bg: #3f4d67;
+  --sidebar-active: #1dc4e9;
+  --card-bg: #ffffff;
+  --primary: #1dc4e9;
+  --secondary: #a389d4;
+  --accent: #04a9f5;
+  --border: #e2e5e8;
+  --shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Professional Card Style */
+.card-professional {
+  background: var(--card-bg);
+  border: none;
+  box-shadow: var(--shadow);
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-professional:hover {
+  box-shadow: 0 10px 20px 0 rgba(69, 90, 100, 0.12);
+}
+
+/* Sidebar Nav */
+.nav-item {
+  color: #a9b7d0;
+  transition: all 0.3s;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar (Professional) */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

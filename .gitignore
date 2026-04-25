@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+dashboard/node_modules/
+.venv/
+env/
+venv/
+
+# Next.js build
+dashboard/.next/
+dashboard/out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.env.local
+dashboard/.env
+dashboard/.env.local
+
+# Project specific
+last_alert.json
+dashboard/public/reports/*.png
+dashboard/public/reports/*.xlsx
+
+# OS files
+.DS_Store
+Thumbs.db

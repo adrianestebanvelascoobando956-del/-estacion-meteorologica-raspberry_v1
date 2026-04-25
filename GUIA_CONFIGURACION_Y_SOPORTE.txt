@@ -1,0 +1,45 @@
+GUÍA DE ARRANQUE Y SOPORTE TÉCNICO - ESTACIÓN METEOROLÓGICA
+===========================================================
+
+1. CÓMO ARRANCAR EL SISTEMA (PASO A PASO)
+-----------------------------------------
+Si la Raspberry se reinicia, debes abrir dos terminales:
+
+Terminal 1 (El Puente):
+> cd c:/Users/User/Documents/codigo_sensores
+> node bridge.js
+
+Terminal 2 (El Panel):
+> cd c:/Users/User/Documents/codigo_sensores/dashboard
+> npm run dev
+
+2. ARCHIVOS CLAVE DE CONFIGURACIÓN
+----------------------------------
+- .env : Aquí están las llaves de WhatsApp y la base de datos.
+- .env.local (en dashboard): Aquí está la llave de OpenWeatherMap.
+
+3. SOLUCIÓN DE PROBLEMAS (FAQ)
+------------------------------
+
+PROBLEMA A: El Dashboard dice "Sin Datos" o "Desconectado".
+- Revisa si 'bridge.js' está corriendo.
+- Mira si el ESP32 tiene el LED azul encendido (está conectado al Wi-Fi).
+- Si recibes alerta de WhatsApp "Fuera de línea", revisa el enchufe de la estación.
+
+PROBLEMA B: Los reportes no se ven o dicen "12:02 PM".
+- Dale al botón "Ejecutar Análisis Profundo" y espera 5 segundos.
+- Mira la terminal de 'bridge.js' para ver si hay algún error de Python.
+- Asegúrate de que no has borrado el archivo 'weather_analysis.py'.
+
+PROBLEMA C: WhatsApp no manda alertas.
+- Revisa que tu APikey de CallMeBot no haya caducado.
+- Mira el archivo 'last_alert.json'. Si tiene una fecha de hace menos de una hora, es normal que no mande más (por el Cooldown).
+
+PROBLEMA D: El disco de 16GB está lleno.
+- Ejecuta el análisis profundo una vez; el script borrará solo los reportes de más de 7 días.
+- Borra la carpeta 'node_modules' y vuelve a hacer 'npm install' si sospechas de archivos temporales pesados.
+
+4. MANTENIMIENTO FÍSICO
+-----------------------
+- Limpia la placa de lluvia con un paño seco cada 15 días para evitar falsos positivos por polvo o sarro.
+- Asegúrate de que la caja transparente no esté filtrando agua hacia el ESP32.
