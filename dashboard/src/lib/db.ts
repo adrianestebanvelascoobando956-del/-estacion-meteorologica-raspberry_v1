@@ -4,7 +4,7 @@ export const dbConfig = {
     host: 'localhost',
     user: 'root',
     password: 'root', // Clave confirmada por el usuario
-    database: 'estacion_clima',
+    database: 'iot_bd',
 };
 
 export async function query(sql: string, params?: any[]) {

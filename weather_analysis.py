@@ -27,7 +27,7 @@ class WeatherAnalysis:
             'host': os.getenv('DB_HOST', 'localhost'),
             'user': os.getenv('DB_USER', 'root'),
             'password': os.getenv('DB_PASSWORD', 'root'),
-            'database': os.getenv('DB_NAME', 'estacion_clima')
+            'database': os.getenv('DB_NAME', 'iot_bd')
         }
         self.owm_api_key = os.getenv('OPENWEATHER_API_KEY')
         self.city = os.getenv('CITY_NAME', 'Popayan')

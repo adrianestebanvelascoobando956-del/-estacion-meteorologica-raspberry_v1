@@ -1,8 +1,8 @@
 -- Script de Configuración para Estación Meteorológica
 -- Abre este archivo en MySQL Workbench y ejecútalo (Rayo arriba a la izquierda)
 
-CREATE DATABASE IF NOT EXISTS estacion_clima;
-USE estacion_clima;
+CREATE DATABASE IF NOT EXISTS iot_bd;
+USE iot_bd;
 
 CREATE TABLE IF NOT EXISTS lecturas (
     id INT AUTO_INCREMENT PRIMARY KEY,

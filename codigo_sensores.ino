@@ -6,9 +6,9 @@
 #include <Adafruit_BMP280.h>
 
 // --- CONFIGURACIÓN WI-FI Y MQTT ---
-const char* WIFI_SSID = "m";
-const char* WIFI_PASSWORD = "00000000";
-const char* MQTT_SERVER = "broker.emqx.io"; 
+const char* WIFI_SSID = "Estacion-Pi";
+const char* WIFI_PASSWORD = "ChangeMe";
+const char* MQTT_SERVER = "192.168.18.1"; 
 const int MQTT_PORT = 1883;
 const char* MQTT_TOPIC = "estacion/mayerly_clima"; 
 const char* MQTT_CLIENT_ID = "Estacion_Meteorologica_ESP32";

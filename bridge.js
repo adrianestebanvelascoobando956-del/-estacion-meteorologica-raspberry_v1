@@ -2,20 +2,20 @@ const mqtt = require('mqtt');
 const mysql = require('mysql2');
 
 // --- CONFIGURACIÓN ---
-const MQTT_BROKER = 'mqtt://broker.emqx.io';
+const MQTT_BROKER = 'mqtt://192.168.18.1';
 const MQTT_TOPIC = 'estacion/mayerly_clima'; // Asegúrate de que en Arduino sea IGUAL
 const DB_CONFIG = {
     host: 'localhost',
     user: 'root',
     password: 'root', 
-    database: 'estacion_clima'
+    database: 'iot_bd'
 };
 
 const db = mysql.createConnection(DB_CONFIG);
 const client = mqtt.connect(MQTT_BROKER);
 
 client.on('connect', () => {
-    console.log('🌍 CONECTADO AL BROKER PÚBLICO (Nube)');
+    console.log('🌍 CONECTADO AL BROKER LOCAL (Raspberry Pi)');
     client.subscribe(MQTT_TOPIC);
 });
 
