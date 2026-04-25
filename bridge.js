@@ -56,7 +56,7 @@ setInterval(() => {
     const { exec } = require('child_process');
     const path = require('path');
     const scriptPath = path.join(__dirname, 'weather_analysis.py');
-    exec(`python "${scriptPath}"`, (err, stdout, stderr) => {
+    exec(`python3 "${scriptPath}"`, (err, stdout, stderr) => {
         if (err) console.error('❌ Error en análisis automático:', err);
         else console.log('✅ Análisis automático completado');
     });
