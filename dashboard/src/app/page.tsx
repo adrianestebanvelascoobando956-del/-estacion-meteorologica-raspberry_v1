@@ -31,18 +31,17 @@ export default function DashboardPage() {
     }, []);
 
     useEffect(() => {
-        if (status !== 'connected') {
-            const interval = setInterval(() => {
-                fetch('/api/latest')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data) setDbData(data);
-                    })
-                    .catch(err => console.error('Error cargando datos de respaldo:', err));
-            }, 3000);
-            return () => clearInterval(interval);
-        }
-    }, [status]);
+        // Siempre consultamos la base de datos local como fuente de verdad constante
+        const interval = setInterval(() => {
+            fetch('/api/latest')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && !data.error) setDbData(data);
+                })
+                .catch(err => console.error('Error cargando datos de la BD:', err));
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     const fetchExternalData = async () => {
         try {
@@ -54,7 +53,7 @@ export default function DashboardPage() {
         }
     };
 
-    const rawData = status === 'connected' ? mqttData : dbData;
+    const rawData = (status === 'connected' && mqttData) ? mqttData : dbData;
     
     const calculateDewPoint = (t: number, h: number) => {
         const a = 17.27;
@@ -138,8 +137,8 @@ export default function DashboardPage() {
                     <div className="flex items-center gap-4 bg-white px-4 py-2 rounded shadow-sm border border-[#e2e5e8]">
                         <div className="flex flex-col items-end">
                             <span className="text-[9px] text-[#202124] uppercase font-bold">Estado Conexión</span>
-                            <span className={`text-[9px] font-bold uppercase ${status === 'connected' ? 'text-green-500' : 'text-blue-500'}`}>
-                                {status === 'connected' ? 'Tiempo Real (MQTT)' : 'Modo Consulta DB'}
+                            <span className={`text-[9px] font-bold uppercase ${status === 'connected' && mqttData ? 'text-green-500' : 'text-blue-500'}`}>
+                                {status === 'connected' && mqttData ? 'Tiempo Real (MQTT)' : 'Modo Consulta DB'}
                             </span>
                         </div>
                         <div className={`w-2 h-2 rounded-full ${status === 'connected' ? 'bg-green-500 animate-pulse' : 'bg-blue-500'}`} />
