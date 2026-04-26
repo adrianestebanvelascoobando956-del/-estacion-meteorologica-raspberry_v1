@@ -7,13 +7,15 @@ const MQTT_TOPIC = 'estacion/mayerly_clima';
 
 // Usar pool en lugar de createConnection para reconexión automática
 const db = mysql.createPool({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'iot_bd',
     waitForConnections: true,
-    connectionLimit: 5,
-    queueLimit: 0
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000
 });
 
 // Verificar conexión al arrancar
