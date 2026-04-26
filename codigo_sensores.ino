@@ -13,6 +13,10 @@ const int MQTT_PORT = 1883;
 const char* MQTT_TOPIC = "estacion/mayerly_clima"; 
 const char* MQTT_CLIENT_ID = "Estacion_Meteorologica_ESP32";
 
+// --- IP ESTÁTICA PARA EVITAR DELAY DE DHCP ---
+IPAddress local_IP(192, 168, 18, 50);
+IPAddress gateway(192, 168, 18, 1);
+IPAddress subnet(255, 255, 255, 0);
 
 // --- PINES ---
 #define PIN_LLUVIA    33   
@@ -29,7 +33,7 @@ Adafruit_BMP280 bmp;
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  Serial.println("\n--- INICIANDO ESTACION CALIBRADA ---");
+  Serial.println("\n--- INICIANDO ESTACION CALIBRADA (OFFLINE READY) ---");
 
   mqttClient.setBufferSize(512);
   Wire.begin(); 
@@ -45,16 +49,29 @@ void setup() {
                   Adafruit_BMP280::FILTER_X16,      
                   Adafruit_BMP280::STANDBY_MS_500); 
 
+  Serial.print("Configurando IP Estática...");
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println(" FALLÓ (Usando DHCP)");
+  } else {
+    Serial.println(" OK");
+  }
+
   Serial.print("Conectando a WiFi...");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
-  while (WiFi.status() != WL_CONNECTED) {
+  unsigned long startAttempt = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttempt < 15000) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWiFi Conectado!");
-  Serial.print("Mi IP es: ");
-  Serial.println(WiFi.localIP());
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\n✅ WiFi Conectado!");
+    Serial.print("Mi IP estática es: ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("\n❌ Error: No se pudo conectar al WiFi.");
+  }
 
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
 }

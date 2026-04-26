@@ -31,6 +31,7 @@ const client = mqtt.connect(MQTT_BROKER);
 
 client.on('connect', () => {
     console.log('🌍 CONECTADO AL BROKER LOCAL (Raspberry Pi)');
+    console.log('   Broker URL:', MQTT_BROKER);
     client.subscribe(MQTT_TOPIC, (err) => {
         if (err) console.error('❌ Error suscribiéndose al topic:', err.message);
         else console.log(`📡 Suscrito al topic: ${MQTT_TOPIC}`);
@@ -109,9 +110,11 @@ client.on('message', (topic, mensaje) => {
         const query = `INSERT INTO lecturas (temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?)`;
         const values = [temperatura, humedad, presion, lluvia, lux, uv];
 
+        console.log('🚀 Intentando guardar en DB...');
         db.query(query, values, (err, result) => {
             if (err) {
                 console.error('❌ Error al guardar en MySQL:', err.message);
+                console.error('   Valores:', JSON.stringify(values));
                 console.error('   Código:', err.code, '| SQL State:', err.sqlState);
             } else {
                 console.log(`💾 Guardado en MySQL OK (insertId: ${result.insertId})`);
