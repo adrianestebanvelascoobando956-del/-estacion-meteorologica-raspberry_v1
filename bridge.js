@@ -21,10 +21,10 @@ const db = mysql.createPool({
 // Verificar conexión al arrancar
 db.getConnection((err, connection) => {
     if (err) {
-        console.error('❌ Error conectando a MySQL:', err.message);
-        console.error('   Verifica: host, usuario, contraseña y que el servicio MySQL esté activo.');
+        console.error(' Error conectando a MySQL:', err.message);
+        console.error(' Verifica: host, usuario, contraseña y que el servicio MySQL esté activo.');
     } else {
-        console.log('✅ Conectado a MySQL local (pool activo)');
+        console.log('Conectado a MySQL local (pool activo)');
         connection.release();
     }
 });
@@ -35,13 +35,13 @@ client.on('connect', () => {
     console.log('🌍 CONECTADO AL BROKER LOCAL (Raspberry Pi)');
     console.log('   Broker URL:', MQTT_BROKER);
     client.subscribe(MQTT_TOPIC, (err) => {
-        if (err) console.error('❌ Error suscribiéndose al topic:', err.message);
+        if (err) console.error('Error suscribiéndose al topic:', err.message);
         else console.log(`📡 Suscrito al topic: ${MQTT_TOPIC}`);
     });
 });
 
 client.on('error', (err) => {
-    console.error('❌ Error MQTT:', err.message);
+    console.error('Error MQTT:', err.message);
 });
 
 // --- CONFIGURACIÓN DE ALERTAS Y AUTOMATIZACIÓN ---
@@ -59,9 +59,9 @@ async function sendWhatsAppAlert(message) {
     const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent('⚠️ SISTEMA: ' + message)}&apikey=${apikey}`;
     try {
         await fetch(url);
-        console.log('📢 Alerta enviada a WhatsApp');
+        console.log('Alerta enviada a WhatsApp');
     } catch (err) {
-        console.log('❌ Error enviando WhatsApp (CallMeBot)');
+        console.log('Error enviando WhatsApp (CallMeBot)');
     }
 }
 
@@ -71,7 +71,7 @@ setInterval(() => {
     if (now - lastDataTime > HEARTBEAT_TIMEOUT && !offlineAlertSent) {
         sendWhatsAppAlert("La estación se encuentra FUERA DE LÍNEA. No se han recibido datos en 15 minutos.");
         offlineAlertSent = true;
-        console.warn('⚠️ Estación fuera de línea detectada');
+        console.warn('Estación fuera de línea detectada');
     }
 }, 60000);
 
@@ -82,8 +82,8 @@ setInterval(() => {
     const path = require('path');
     const scriptPath = path.join(__dirname, 'weather_analysis.py');
     exec(`python3 "${scriptPath}"`, (err, stdout, stderr) => {
-        if (err) console.error('❌ Error en análisis automático:', err.message);
-        else console.log('✅ Análisis automático completado');
+        if (err) console.error('Error en análisis automático:', err.message);
+        else console.log(' Análisis automático completado');
     });
 }, AUTO_ANALYSIS_INTERVAL);
 
@@ -91,15 +91,15 @@ client.on('message', (topic, mensaje) => {
     try {
         const raw = mensaje.toString();
         const d = JSON.parse(raw);
-        console.log('📥 Dato recibido de la nube:', JSON.stringify(d));
+        console.log('Dato recibido de la nube:', JSON.stringify(d));
 
         // Actualizar último pulso de vida
         lastDataTime = Date.now();
         if (offlineAlertSent) {
-            sendWhatsAppAlert("✅ La estación ha vuelto a conectarse con éxito.");
+            sendWhatsAppAlert("La estación ha vuelto a conectarse con éxito.");
             offlineAlertSent = false;
         }
-
+        const fecha = d.fecha;
         const temperatura = d.temp  ?? d.t  ?? null;
         const humedad     = d.hum   ?? d.h  ?? null;
         const presion     = d.pres  ?? d.p  ?? null;
@@ -109,22 +109,22 @@ client.on('message', (topic, mensaje) => {
 
         console.log(`   → temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
 
-        const query = `INSERT INTO lecturas (temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?)`;
-        const values = [temperatura, humedad, presion, lluvia, lux, uv];
+        const query = `INSERT INTO lecturas (fecha, temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?)`;
+        const values = [fecha, temperatura, humedad, presion, lluvia, lux, uv];
 
-        console.log('🚀 Intentando guardar en DB...');
+        console.log('Intentando guardar en DB...');
         db.query(query, values, (err, result) => {
             if (err) {
-                console.error('❌ Error al guardar en MySQL:', err.message);
+                console.error(' Error al guardar en MySQL:', err.message);
                 console.error('   Valores:', JSON.stringify(values));
                 console.error('   Código:', err.code, '| SQL State:', err.sqlState);
             } else {
-                console.log(`💾 Guardado en MySQL OK (insertId: ${result.insertId})`);
+                console.log(`Guardado en MySQL OK (insertId: ${result.insertId})`);
             }
         });
 
     } catch (e) {
-        console.error('❌ Error parseando JSON:', e.message);
+        console.error(' Error parseando JSON:', e.message);
         console.error('   Mensaje raw:', mensaje.toString());
     }
 });
