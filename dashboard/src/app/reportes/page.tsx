@@ -10,22 +10,7 @@ import {
     Tooltip, 
     ResponsiveContainer
 } from 'recharts';
-import { 
-    RefreshCcw,
-    ChevronRight,
-    Home,
-    Thermometer,
-    Droplets,
-    Gauge,
-    CloudRain,
-    Sun,
-    Zap,
-    TrendingUp,
-    FileSpreadsheet,
-    Activity,
-    AlertCircle,
-    Calendar
-} from 'lucide-react';
+
 
 export default function ReportsPage() {
     const [data, setData] = useState<any[]>([]);
@@ -296,10 +281,7 @@ export default function ReportsPage() {
                 <div>
                     <h2 className="text-xl font-black text-gray-800 tracking-tight">Reportes Históricos por Sensor</h2>
                     <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">
-                        <Home size={10} />
-                        <span>Panel</span>
-                        <ChevronRight size={10} />
-                        <span className="text-cyan-500">Historial de Sensores</span>
+                        Panel <span className="text-cyan-500 ml-1">Historial de Sensores</span>
                     </div>
                 </div>
                 
@@ -309,7 +291,7 @@ export default function ReportsPage() {
                         disabled={loading}
                         className="flex items-center gap-2 text-xs font-bold text-gray-600 bg-white border border-[#e2e5e8] hover:border-gray-400 py-2.5 px-4 rounded shadow-sm active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                     >
-                        <RefreshCcw size={14} className={loading ? 'animate-spin' : ''} /> Actualizar Datos
+                        {loading ? 'Actualizando...' : 'Actualizar Datos'}
                     </button>
                     
                     <button 
@@ -317,7 +299,7 @@ export default function ReportsPage() {
                         disabled={runningExport}
                         className="flex items-center gap-2 text-xs font-bold text-white bg-gradient-to-r from-[#3f4d67] to-[#2b3547] border border-none py-2.5 px-4 rounded shadow-lg hover:brightness-110 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                     >
-                        <FileSpreadsheet size={14} /> {runningExport ? 'Exportando...' : 'Exportar Reportes (Python)'}
+                        {runningExport ? 'Exportando...' : 'Exportar Reportes (Python)'}
                     </button>
                 </div>
             </div>
@@ -325,8 +307,8 @@ export default function ReportsPage() {
             {/* Offline-Compatible Time Aggregation Control */}
             <div className="bg-white border border-[#e2e5e8] p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-cyan-50 text-cyan-600 rounded-lg">
-                        <TrendingUp size={16} />
+                    <div className="p-2 bg-cyan-50 text-cyan-600 rounded-lg font-black text-xs uppercase">
+                        TMP
                     </div>
                     <div>
                         <h4 className="text-xs font-bold text-gray-800 leading-none">Agrupación Temporal</h4>
@@ -336,11 +318,10 @@ export default function ReportsPage() {
 
                 <div className="bg-gray-100/80 p-1 rounded-xl flex items-center gap-1 border border-gray-200/50 shadow-inner">
                     {[
-                        { id: 'horas', label: 'Por Horas', icon: TrendingUp },
-                        { id: 'dias', label: 'Por Días', icon: Calendar },
-                        { id: 'meses', label: 'Por Meses', icon: Calendar }
+                        { id: 'horas', label: 'Por Horas' },
+                        { id: 'dias', label: 'Por Días' },
+                        { id: 'meses', label: 'Por Meses' }
                     ].map((tab) => {
-                        const Icon = tab.icon;
                         const isActive = viewMode === tab.id;
                         return (
                             <button
@@ -352,7 +333,7 @@ export default function ReportsPage() {
                                     : 'text-gray-500 hover:text-gray-800'
                                 }`}
                             >
-                                <Icon size={14} className={isActive ? 'text-cyan-500' : 'text-gray-400'} />
+
                                 {tab.label}
                             </button>
                         );
@@ -363,14 +344,14 @@ export default function ReportsPage() {
             {loading && data.length === 0 ? (
                 /* Loading State Spinner */
                 <div className="h-[450px] flex flex-col items-center justify-center text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <Activity size={48} className="animate-pulse text-cyan-500 mb-4" />
+
                     <p className="text-sm font-semibold uppercase tracking-wider">Cargando mediciones históricas...</p>
                     <p className="text-xs text-gray-400 mt-1">Conectando con la base de datos local</p>
                 </div>
             ) : data.length === 0 ? (
                 /* Empty Database State */
                 <div className="h-[300px] flex flex-col items-center justify-center text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
-                    <AlertCircle size={48} className="text-orange-400 mb-4" />
+
                     <p className="text-sm font-semibold uppercase tracking-wider">Sin mediciones en el historial</p>
                     <p className="text-xs text-gray-400 mt-2 max-w-sm">No se encontraron registros en la tabla `lecturas` de MySQL. Enciende tu módulo ESP32 o ejecuta el puente de red MQTT para registrar datos.</p>
                 </div>
@@ -383,7 +364,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <Thermometer size={16} className="text-orange-500" /> Temperatura (°C) vs Tiempo
+                                    Temperatura (°C) vs Tiempo
                                 </h3>
                                 <span className="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Cabina</span>
                             </div>
@@ -415,7 +396,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <Droplets size={16} className="text-blue-500" /> Humedad (%) vs Tiempo
+                                    Humedad (%) vs Tiempo
                                 </h3>
                                 <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Cabina</span>
                             </div>
@@ -447,7 +428,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <Gauge size={16} className="text-cyan-500" /> Presión Atmosférica (hPa) vs Tiempo
+                                    Presión Atmosférica (hPa) vs Tiempo
                                 </h3>
                                 <span className="bg-cyan-50 text-cyan-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Cabina</span>
                             </div>
@@ -479,7 +460,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <CloudRain size={16} className="text-indigo-500" /> Nivel de Lluvia (%) vs Tiempo
+                                    Nivel de Lluvia (%) vs Tiempo
                                 </h3>
                                 <span className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Exterior</span>
                             </div>
@@ -511,7 +492,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <Sun size={16} className="text-yellow-500" /> Luminosidad (Lux) vs Tiempo
+                                    Luminosidad (Lux) vs Tiempo
                                 </h3>
                                 <span className="bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Exterior</span>
                             </div>
@@ -543,7 +524,7 @@ export default function ReportsPage() {
                         <div>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="text-xs font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                    <Zap size={16} className="text-purple-500" /> Índice UV vs Tiempo
+                                    Índice UV vs Tiempo
                                 </h3>
                                 <span className="bg-purple-50 text-purple-600 px-2 py-0.5 rounded text-[8px] font-black uppercase">Sensor Exterior</span>
                             </div>

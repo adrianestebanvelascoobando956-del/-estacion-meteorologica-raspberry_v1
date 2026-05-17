@@ -3,18 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMQTT } from '@/hooks/useMQTT';
 import SensorCard from '@/components/SensorCard';
-import { 
-    Thermometer, 
-    Droplets, 
-    Wind, 
-    CloudRain, 
-    Sun, 
-    Zap,
-    AlertTriangle,
-    ChevronRight,
-    Home,
-    CloudSun
-} from 'lucide-react';
+
 import GaugeChart from 'react-gauge-chart';
 
 export default function DashboardPage() {
@@ -84,7 +73,7 @@ export default function DashboardPage() {
             title: 'Temperatura', 
             value: data?.t ?? '--', 
             unit: '°C', 
-            icon: Thermometer, 
+
             color: 'orange', 
             desc: `SENSACIÓN: ${data ? calculateHeatIndex(data.t, data.h) : '--'}°C`,
             ref: external ? `${external.temp}°C Oficial` : null
@@ -93,7 +82,7 @@ export default function DashboardPage() {
             title: 'Humedad', 
             value: data?.h ?? '--', 
             unit: '%', 
-            icon: Droplets, 
+
             color: 'blue', 
             desc: `PTO. ROCÍO: ${data ? calculateDewPoint(data.t, data.h) : '--'}°C`,
             ref: external ? `${external.hum}% Oficial` : null
@@ -102,7 +91,7 @@ export default function DashboardPage() {
             title: 'Presión Local', 
             value: data?.p ?? '--', 
             unit: 'hPa', 
-            icon: Wind, 
+
             color: 'cyan', 
             desc: 'PRESIÓN ESTABLE',
             ref: external ? `${external.desc}` : null
@@ -118,7 +107,7 @@ export default function DashboardPage() {
                 <div>
                     <h2 className="text-xl font-bold text-[#202124] mb-1">Panel de Control</h2>
                     <div className="flex items-center gap-2 text-xs text-[#888]">
-                        <Home size={12} /> <ChevronRight size={10} /> Panel <ChevronRight size={10} /> <span className="text-cyan-600 font-bold">Resumen Clima</span>
+                        Panel  <span className="text-cyan-600 font-bold ml-1">Resumen Clima</span>
                     </div>
                 </div>
                 
@@ -153,7 +142,6 @@ export default function DashboardPage() {
                         title="Temperatura" 
                         value={data?.t ?? '--'} 
                         unit="°C" 
-                        icon={Thermometer} 
                         color="orange" 
                         description={`SENSACIÓN: ${data ? calculateHeatIndex(data.t, data.h) : '--'}°C`}
                     />
@@ -169,7 +157,6 @@ export default function DashboardPage() {
                         title="Humedad" 
                         value={data?.h ?? '--'} 
                         unit="%" 
-                        icon={Droplets} 
                         color="blue" 
                         description={`PTO. ROCÍO: ${data ? calculateDewPoint(data.t, data.h) : '--'}°C`}
                     />
@@ -185,7 +172,6 @@ export default function DashboardPage() {
                         title="Presión Local" 
                         value={data?.p ?? '--'} 
                         unit="hPa" 
-                        icon={Wind} 
                         color="cyan" 
                         description="PRESIÓN ESTABLE"
                     />
@@ -199,7 +185,7 @@ export default function DashboardPage() {
                 <div className="card-professional p-6 relative lg:col-span-1">
                     <div className="flex justify-between items-start mb-4">
                         <h3 className="text-xs font-black text-[#202124] uppercase tracking-widest flex items-center gap-2">
-                            <Zap className="text-orange-500" size={14} /> Índice UV
+                            Índice UV
                         </h3>
                         <div className="flex gap-1">
                             <span className="px-2 py-0.5 bg-orange-500 text-white text-[8px] font-black rounded uppercase">EXTERIOR</span>
@@ -216,7 +202,7 @@ export default function DashboardPage() {
                 <div className="card-professional p-6 relative">
                     <div className="flex justify-between items-start mb-6">
                         <h3 className="text-xs font-black text-[#202124] uppercase tracking-widest flex items-center gap-2">
-                            <CloudRain className="text-blue-500" size={14} /> Lluvia
+                            Lluvia
                         </h3>
                         <div className="flex gap-1">
                             <span className="px-2 py-0.5 bg-blue-500 text-white text-[8px] font-black rounded uppercase">EXTERIOR</span>
@@ -225,7 +211,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-4">
                         <div className={`p-4 rounded-xl ${(data?.ll ?? 0) > 25 ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>
-                            <CloudRain size={28} />
+                            <span className="font-bold text-xl uppercase tracking-widest text-[#2c3e50]">L/S</span>
                         </div>
                         <div>
                             <p className="text-lg font-black text-[#202124] tracking-tight">{(data?.ll ?? 0) > 25 ? 'Lluvia' : 'Despejado'}</p>
@@ -238,7 +224,7 @@ export default function DashboardPage() {
                 <div className="card-professional p-6 relative">
                     <div className="flex justify-between items-start mb-6">
                         <h3 className="text-xs font-black text-[#202124] uppercase tracking-widest flex items-center gap-2">
-                            <Sun className="text-yellow-500" size={14} /> Iluminación
+                            Iluminación
                         </h3>
                         <div className="flex gap-1">
                             <span className="px-2 py-0.5 bg-yellow-500 text-white text-[8px] font-black rounded uppercase">EXTERIOR</span>
@@ -254,7 +240,7 @@ export default function DashboardPage() {
                 {/* FOOTER INFO (VIENTO / UPTIME) */}
                 <div className="lg:col-span-3 bg-white/40 border border-dashed border-[#e2e5e8] p-4 rounded-2xl flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <Wind size={16} className="text-cyan-600" />
+
                         <div className="flex flex-col">
                             <span className="text-[8px] font-black text-[#888] uppercase tracking-widest leading-none mb-1">Viento (Oficial Popayán)</span>
                             <span className="text-sm font-black text-cyan-700">{external?.wind ?? '--'} m/s</span>

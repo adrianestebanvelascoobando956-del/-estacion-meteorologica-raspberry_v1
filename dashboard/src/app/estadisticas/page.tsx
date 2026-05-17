@@ -10,16 +10,7 @@ import {
     Tooltip as RechartsTooltip, 
     ResponsiveContainer 
 } from 'recharts';
-import { 
-    Calculator,
-    TrendingUp,
-    BarChart2,
-    Activity,
-    Table as TableIcon,
-    AlertCircle,
-    ChevronRight,
-    Home
-} from 'lucide-react';
+
 
 export default function StatisticsPage() {
     const [data, setData] = useState<any[]>([]);
@@ -213,22 +204,19 @@ export default function StatisticsPage() {
                 <div>
                     <h2 className="text-xl font-black text-gray-800 tracking-tight">Análisis Matemático Estadístico</h2>
                     <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">
-                        <Home size={10} />
-                        <span>Panel</span>
-                        <ChevronRight size={10} />
-                        <span className="text-cyan-500">Estadísticas</span>
+                        Panel <span className="text-cyan-500 ml-1">Estadísticas</span>
                     </div>
                 </div>
             </div>
 
             {loading && data.length === 0 ? (
                 <div className="h-[450px] flex flex-col items-center justify-center text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <Activity size={48} className="animate-pulse text-cyan-500 mb-4" />
+
                     <p className="text-sm font-semibold uppercase tracking-wider">Cargando mediciones...</p>
                 </div>
             ) : data.length === 0 ? (
                 <div className="h-[300px] flex flex-col items-center justify-center text-gray-400 bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
-                    <AlertCircle size={48} className="text-orange-400 mb-4" />
+
                     <p className="text-sm font-semibold uppercase tracking-wider">Sin mediciones</p>
                 </div>
             ) : (
@@ -236,8 +224,8 @@ export default function StatisticsPage() {
                     {/* Control Panel */}
                     <div className="bg-white border border-[#e2e5e8] p-5 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                                <Calculator size={18} />
+                            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg font-bold text-lg">
+                                CALC
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold text-gray-800 leading-none">Seleccionar Variable</h4>
@@ -262,7 +250,7 @@ export default function StatisticsPage() {
                             {/* Ungrouped Stats Card */}
                             <div className="card-professional p-6 border-t-4 border-cyan-500">
                                 <div className="flex items-center gap-2 mb-6">
-                                    <TrendingUp size={20} className="text-cyan-500" />
+
                                     <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">Datos No Agrupados</h3>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
@@ -280,7 +268,7 @@ export default function StatisticsPage() {
                             {/* Histogram Chart */}
                             <div className="card-professional p-6 border-t-4 border-indigo-500">
                                 <div className="flex items-center gap-2 mb-6">
-                                    <BarChart2 size={20} className="text-indigo-500" />
+
                                     <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">Histograma de Frecuencias</h3>
                                 </div>
                                 <div className="w-full mt-2 min-w-0">

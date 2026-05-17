@@ -1,16 +1,16 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+
 
 interface SensorCardProps {
     title: string;
     value: string | number;
     unit: string;
-    icon: LucideIcon;
+
     color: string;
     description?: string;
 }
 
-const SensorCard: React.FC<SensorCardProps> = ({ title, value, unit, icon: Icon, color, description }) => {
+const SensorCard: React.FC<SensorCardProps> = ({ title, value, unit, color, description }) => {
     const displayValue = typeof value === 'number' ? value.toFixed(1) : value;
 
     // Colores para la barra inferior según el tipo de sensor
@@ -25,9 +25,6 @@ const SensorCard: React.FC<SensorCardProps> = ({ title, value, unit, icon: Icon,
             <div>
                 <div className="flex justify-between items-start mb-4">
                     <h3 className="text-[#888] text-xs font-bold uppercase tracking-wider">{title}</h3>
-                    <div className={`text-${color}-500 opacity-80`}>
-                        <Icon size={24} />
-                    </div>
                 </div>
                 
                 <div className="flex items-baseline gap-1 mt-2">

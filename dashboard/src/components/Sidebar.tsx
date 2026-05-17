@@ -53,7 +53,7 @@ const Sidebar = () => {
                 ))}
             </div>
 
-            <div className="p-6 bg-[#333f54] text-[10px] text-[#748892] uppercase tracking-widest text-center">
+            <div className="p-6 bg-[#333f54] text-[10px] text-[#fff] uppercase tracking-widest text-center">
                 ESTACIÓN CONECTADA
             </div>
         </aside>

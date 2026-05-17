@@ -1,15 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-    Calendar, 
-    Download, 
-    Search, 
-    ChevronLeft, 
-    ChevronRight,
-    Home,
-    Table as TableIcon
-} from 'lucide-react';
+
 
 export default function HistoryPage() {
     const [history, setHistory] = useState<any[]>([]);
@@ -63,7 +55,7 @@ export default function HistoryPage() {
                 <div>
                     <h2 className="text-xl font-bold text-[#202124] mb-1">Historial de Datos</h2>
                     <div className="flex items-center gap-2 text-xs text-[#888]">
-                        <Home size={12} /> <ChevronLeft size={10} /> Panel <ChevronLeft size={10} /> <span className="text-cyan-600 font-bold">Historial</span>
+                        Panel <span className="text-cyan-600 font-bold ml-1">Historial</span>
                     </div>
                 </div>
                 
@@ -78,7 +70,7 @@ export default function HistoryPage() {
                         onClick={exportToCSV}
                         className="btn-primary flex items-center gap-2 text-xs py-2 px-4 bg-cyan-600 text-white rounded hover:bg-cyan-700 transition-colors"
                     >
-                        <Download size={14} /> Exportar CSV
+                        Exportar CSV
                     </button>
                 </div>
             </div>
