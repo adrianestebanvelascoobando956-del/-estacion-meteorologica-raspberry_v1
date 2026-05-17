@@ -77,7 +77,7 @@ setInterval(() => {
 
 // Ejecutor Automático de Análisis
 setInterval(() => {
-    console.log('🤖 Iniciando análisis automático programado...');
+    console.log('Iniciando análisis automático programado...');
     const { exec } = require('child_process');
     const path = require('path');
     const scriptPath = path.join(__dirname, 'weather_analysis.py');
@@ -99,7 +99,9 @@ client.on('message', (topic, mensaje) => {
             sendWhatsAppAlert("La estación ha vuelto a conectarse con éxito.");
             offlineAlertSent = false;
         }
-        const fecha = d.fecha;
+        console.log(d);
+        
+        const fecha = d.fecha ?? d.timestamp ?? new Date().toISOString().slice(0, 19).replace('T', ' ');
         const temperatura = d.temp  ?? d.t  ?? null;
         const humedad     = d.hum   ?? d.h  ?? null;
         const presion     = d.pres  ?? d.p  ?? null;
@@ -107,7 +109,7 @@ client.on('message', (topic, mensaje) => {
         const lux         = d.lux   ?? d.lx ?? null;
         const uv          = d.uv    ?? null;
 
-        console.log(` ${fecha}  → temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
+        console.log(`temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
 
         const query = `INSERT INTO lecturas (fecha, temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?, ?)`;
         const values = [fecha, temperatura, humedad, presion, lluvia, lux, uv];
