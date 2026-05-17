@@ -107,9 +107,9 @@ client.on('message', (topic, mensaje) => {
         const lux         = d.lux   ?? d.lx ?? null;
         const uv          = d.uv    ?? null;
 
-        console.log(`   → temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
+        console.log(` ${fecha}  → temp=${temperatura} hum=${humedad} pres=${presion} lluvia=${lluvia} lux=${lux} uv=${uv}`);
 
-        const query = `INSERT INTO lecturas (fecha, temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO lecturas (fecha, temperatura, humedad, presion, lluvia, lux, uv) VALUES (?, ?, ?, ?, ?, ?, ?)`;
         const values = [fecha, temperatura, humedad, presion, lluvia, lux, uv];
 
         console.log('Intentando guardar en DB...');
