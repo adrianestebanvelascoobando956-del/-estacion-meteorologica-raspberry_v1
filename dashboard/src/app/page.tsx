@@ -131,9 +131,7 @@ export default function DashboardPage() {
                                 <p className="text-[11px] font-bold text-gray-700 leading-none">{external.desc}: {external.temp}°C</p>
                             </div>
                         </div>
-                    ) : (
-                        <div className="text-[9px] text-gray-400 font-bold uppercase animate-pulse">Cargando datos oficiales...</div>
-                    )}
+                    ) : null}
                     <div className="flex items-center gap-4 bg-white px-4 py-2 rounded shadow-sm border border-[#e2e5e8]">
                         <div className="flex flex-col items-end">
                             <span className="text-[9px] text-[#202124] uppercase font-bold">Estado Conexión</span>
